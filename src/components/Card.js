@@ -1,7 +1,7 @@
 import React from "react";
-import ImageNotFound from "./img/ImageNotFound.png";
+import ImageNotFound from "../img/ImageNotFound.png";
 
-const Card = ({ image, title, overview, id, service }) => {
+const Card = ({ image, title, overview, id, service, countries }) => {
     const picture = image || ImageNotFound;
 
     return (
@@ -11,7 +11,7 @@ const Card = ({ image, title, overview, id, service }) => {
                 <div className="card-body">
                     <h5 className="card-title">{title}</h5>
                     <h6 className="card-subtitle mb-2 text-danger">
-                        Available on {service.toUpperCase()}
+                        Available on {service.toUpperCase()} in {countries}
                     </h6>
                     <p className="card-text">{overview}</p>
                     <a

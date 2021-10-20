@@ -1,4 +1,5 @@
 import { atom } from "jotai";
+import AuthService from "./components/auth/components/services/auth.service";
 
 const genres = [
     { id: 28, name: "Action" },
@@ -64,6 +65,7 @@ const state = {
             streamingInfo: "",
         },
     ]),
+    currentUserAtom: atom(AuthService.getCurrentUser()),
 };
 
 export default state;

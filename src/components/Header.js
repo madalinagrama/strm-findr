@@ -2,11 +2,12 @@ import React, { Fragment } from "react";
 import { Link, NavLink, useLocation } from "react-router-dom";
 import { useAtom } from "jotai";
 
+import AuthService from "../components/auth/components/services/auth.service";
+
+import logo from "../img/Logo.png";
+
 import Dropdown from "./Dropdown";
-import logo from "./img/Logo.png";
-
 import state from "../stateManager";
-
 import ImageSlider from "./ImageSlider";
 
 const Header = () => {
@@ -16,12 +17,15 @@ const Header = () => {
     const [_loading, setLoading] = useAtom(state.loadingAtom);
     const [countries] = useAtom(state.countriesListAtom);
     const [genres] = useAtom(state.genresListAtom);
+    const [currentUser] = useAtom(state.currentUserAtom);
+
     const location = useLocation();
 
     const handleCountryChange = (e) => {
         e.preventDefault();
         setCountry(e.target.dataset.id);
     };
+
     const handleGenreChange = (e) => {
         e.preventDefault();
         console.log("genre is" + e.target.dataset.id);
@@ -33,6 +37,10 @@ const Header = () => {
         setKeyword(e.target.searchbox.value);
         setLoading(true);
     };
+
+    function logOut() {
+        AuthService.logout();
+    }
 
     const logoProps = {
         src: logo,
@@ -107,22 +115,41 @@ const Header = () => {
                                 </NavLink>
                             </li>
                         </ul>
-
-                        <ul className="navbar-nav mb-2 mb-lg-0">
-                            <li className="nav-item">
-                                <NavLink {...navLinkProps} to="/login">
-                                    Login
-                                </NavLink>
-                            </li>
-                            {/* <li className="nav-item">
-                                <NavLink {...navLinkProps} to="/register">
-                                    Register
-                                </NavLink>
-                            </li> */}
-                            <li className="nav-item">
-                                <button {...logoutButtonProps}>Logout</button>
-                            </li>
-                        </ul>
+                        {currentUser && (
+                            <ul className="navbar-nav mb-2 mb-lg-0">
+                                <li className="nav-item">
+                                    <NavLink
+                                        {...navLinkProps}
+                                        to={`/profile/${currentUser.id}`}
+                                    >
+                                        {currentUser.username}
+                                    </NavLink>
+                                </li>
+                                <li className="nav-item">
+                                    <NavLink
+                                        {...logoutButtonProps}
+                                        to="/"
+                                        onClick={logOut}
+                                    >
+                                        Logout
+                                    </NavLink>
+                                </li>
+                            </ul>
+                        )}
+                        {!currentUser && (
+                            <ul className="navbar-nav mb-2 mb-lg-0">
+                                <li className="nav-item">
+                                    <NavLink {...navLinkProps} to="/login">
+                                        Login
+                                    </NavLink>
+                                </li>
+                                <li className="nav-item">
+                                    <NavLink {...navLinkProps} to="/register">
+                                        Register
+                                    </NavLink>
+                                </li>
+                            </ul>
+                        )}
                     </div>
                 </div>
             </nav>

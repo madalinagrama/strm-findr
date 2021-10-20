@@ -5,7 +5,7 @@ const UserPage = () => {
     const [users, setUsers] = useState([]);
 
     const fetchUser = async () => {
-        const resp = await axios.get("http://localhost:8080/auth");
+        const resp = await axios.get(process.env.REACT_APP_AUTH_URL);
 
         setUsers(resp.data);
     };
@@ -17,7 +17,7 @@ const UserPage = () => {
             <button onClick={fetchUser}>SEARCH</button>
             {users.map((user, index) => (
                 <p key={index}>
-                    {user.firstName},{user.lastName}
+                    {user.username},{user.password}
                 </p>
             ))}
         </div>
