@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import ImageNotFound from "../img/ImageNotFound.png";
 import { useAtom } from "jotai";
 import state from "../stateManager";
@@ -15,10 +15,9 @@ const Card = ({
     service = "",
     countries = "",
     imdb = "",
-    handleFavorites = false,
 }) => {
     const [currentUser] = useAtom(state.currentUserAtom);
-    const [favorites, setFavorites] = useState(state.favoritesAtom);
+    const [favorites, setFavorites] = useAtom(state.favoritesAtom);
 
     // console.log({ image, title, overview, id, service, countries, imdb });
     // will get user's favorites
@@ -35,11 +34,13 @@ const Card = ({
                     movie_id: id,
                 }
             )
-            .then((data) => {
+            .then(() => {
                 setFavorites([...favorites, id]);
             })
             .catch((e) => console.error(e));
     };
+
+    const isFavorite = favorites.includes(id);
 
     return (
         <div className="col-sm-12 col-md-6 col-lg-4 mb-4">
@@ -54,7 +55,7 @@ const Card = ({
                                 className="btn btn-light mx-5"
                                 onClick={favoriteHandler}
                             >
-                                {favorites.includes(id) ? (
+                                {isFavorite ? (
                                     <AiFillHeart className="fav" />
                                 ) : (
                                     <AiOutlineHeart className="fav" />

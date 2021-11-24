@@ -13,6 +13,7 @@ import Spinner from "./components/Spinner";
 import Register from "./components/Register";
 import Login from "./components/Login";
 import UserProfile from "./components/UserProfile";
+import authHeader from "./components/auth/components/services/auth-header";
 
 import "./App.css";
 // import UserProfile from "./components/user/UserProfile";
@@ -68,7 +69,7 @@ const App = () => {
                         { headers: authHeader() }
                     )
                     .then((data) => {
-                        setFavorites(data.data.map((e) => e.id));
+                        setFavorites(data.data);
                     })
                     .catch((e) => console.error(e));
             }
