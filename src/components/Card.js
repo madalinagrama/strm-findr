@@ -18,26 +18,7 @@ const Card = ({
     handleFavorites = false,
 }) => {
     const [currentUser] = useAtom(state.currentUserAtom);
-    const [favorites, setFavorites] = useState([]);
-
-    useEffect(() => {
-        axios
-            .get(
-                process.env.REACT_APP_BASE_URL +
-                    "/user/" +
-                    currentUser.id +
-                    "/favorites",
-                {
-                    headers: authHeader(),
-                }
-            )
-            .then((data) => {
-                setFavorites(data.data.map((e) => e.id));
-            })
-            .catch((e) => {
-                console.error(e);
-            });
-    }, []);
+    const [favorites, setFavorites] = useState(state.favoritesAtom);
 
     // console.log({ image, title, overview, id, service, countries, imdb });
     // will get user's favorites
@@ -60,13 +41,6 @@ const Card = ({
             .catch((e) => console.error(e));
     };
 
-    let classes = "btn";
-    if (favorites.includes(id)) {
-        classes += " btn-danger";
-    } else {
-        classes += " btn-light";
-    }
-
     return (
         <div className="col-sm-12 col-md-6 col-lg-4 mb-4">
             <div className="bg-dark border card text-white">
@@ -78,7 +52,7 @@ const Card = ({
                             <button
                                 data-movie={id}
                                 className="btn btn-light mx-5"
-                                onClick={(e) => favoriteHandler()}
+                                onClick={favoriteHandler}
                             >
                                 {favorites.includes(id) ? (
                                     <AiFillHeart className="fav" />

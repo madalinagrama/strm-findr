@@ -24,9 +24,11 @@ const App = () => {
     const [keyword] = useAtom(state.currentKeywordAtom);
     const [_cards, setCards] = useAtom(state.cardsAtom);
     const [loading, setLoading] = useAtom(state.loadingAtom);
+    const [currentUser] = useAtom(state.currentUserAtom);
+    const [favorites, setFavorites] = useAtom(state.favoritesAtom);
 
     useEffect(() => {
-        const cardsLoader = async () => {
+        const cardsLoader = () => {
             let cards = [];
 
             axios
@@ -54,9 +56,22 @@ const App = () => {
                         setLoading(false);
                     }
                 })
-                .catch((e) => {
-                    console.error(e);
-                });
+                .catch((e) => console.error(e));
+
+            if (!!currentUser) {
+                axios
+                    .get(
+                        process.env.REACT_APP_BASE_URL +
+                            "/user/" +
+                            currentUser.id +
+                            "/favorites",
+                        { headers: authHeader() }
+                    )
+                    .then((data) => {
+                        setFavorites(data.data.map((e) => e.id));
+                    })
+                    .catch((e) => console.error(e));
+            }
         };
 
         cardsLoader();
