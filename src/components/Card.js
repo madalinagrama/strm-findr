@@ -18,43 +18,54 @@ const Card = ({
     handleFavorites = false,
 }) => {
     const [currentUser] = useAtom(state.currentUserAtom);
-    // const [favorites, setFavorites] = useState({});
+    const [favorites, setFavorites] = useState([]);
 
-    // useEffect(() => {
-    //     setFavorites({
-    //         user_id: currentUser.id,
-    //         movie_id: id,
-    //     });
-    // }, []);
-
-    // console.log({ image, title, overview, id, service, countries, imdb });
-
-    const favoriteHandler = async () => {
-        console.log(currentUser);
-        if (handleFavorites) {
-            const resp = await axios.get(
+    useEffect(() => {
+        axios
+            .get(
                 process.env.REACT_APP_BASE_URL +
-                "/user/" +
-                currentUser.id +
-                "/favorites",
+                    "/user/" +
+                    currentUser.id +
+                    "/favorites",
                 {
                     headers: authHeader(),
                 }
-            );
+            )
+            .then((data) => {
+                setFavorites(data.data.map((e) => e.id));
+            })
+            .catch((e) => {
+                console.error(e);
+            });
+    }, []);
 
-            console.log(resp);
-        }
-
-        // const req = await axios.post(
-        //     process.env.REACT_APP_BASE_URL +
-        //         "/user/" +
-        //         currentUser.id +
-        //         "/favorites/",
-        //     {
-        //         headers: authHeader(),
-        //     }
-        // );
+    // console.log({ image, title, overview, id, service, countries, imdb });
+    // will get user's favorites
+    const favoriteHandler = () => {
+        axios
+            .post(
+                process.env.REACT_APP_BASE_URL +
+                    "/user/" +
+                    currentUser.id +
+                    "/favorites/",
+                {
+                    headers: authHeader(),
+                    user_id: currentUser.id,
+                    movie_id: id,
+                }
+            )
+            .then((data) => {
+                setFavorites([...favorites, id]);
+            })
+            .catch((e) => console.error(e));
     };
+
+    let classes = "btn";
+    if (favorites.includes(id)) {
+        classes += " btn-danger";
+    } else {
+        classes += " btn-light";
+    }
 
     return (
         <div className="col-sm-12 col-md-6 col-lg-4 mb-4">
@@ -65,10 +76,15 @@ const Card = ({
                         <div className="title">{title}</div>
                         {currentUser?.id && (
                             <button
-                                className="btn btn-light"
+                                data-movie={id}
+                                className="btn btn-light mx-5"
                                 onClick={(e) => favoriteHandler()}
                             >
-                                <AiOutlineHeart className="fav" />
+                                {favorites.includes(id) ? (
+                                    <AiFillHeart className="fav" />
+                                ) : (
+                                    <AiOutlineHeart className="fav" />
+                                )}
                             </button>
                         )}
                     </h5>
