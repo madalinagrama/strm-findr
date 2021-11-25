@@ -78,3 +78,7 @@ svg {
 .red {
     background-color: #dc3545;
 }
+
+.card-title {
+    display: flex;
+}

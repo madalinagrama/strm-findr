@@ -15,7 +15,7 @@ const Register = () => {
     const [message, setMessage] = useState("cv");
     const [success, setSuccess] = useState(false);
 
-    const [_currentUser, setCurrentUser] = useAtom(state.currentUserAtom);
+    const [, setCurrentUser] = useAtom(state.currentUserAtom);
 
     const errorHandling = () => {
         const errors = [

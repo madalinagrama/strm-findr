@@ -1,21 +1,74 @@
 import React from "react";
 import ImageNotFound from "../img/ImageNotFound.png";
+import { useAtom } from "jotai";
+import state from "../stateManager";
 
-const Card = ({ image, title, overview, id, service, countries }) => {
-    const picture = image || ImageNotFound;
+import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
+import axios from "axios";
+import authHeader from "./auth/components/services/auth-header";
+
+const Card = ({
+    image = ImageNotFound,
+    title = "",
+    overview = "",
+    id = "",
+    service = "",
+    countries = "",
+    imdb = "",
+}) => {
+    const [currentUser] = useAtom(state.currentUserAtom);
+    const [favorites, setFavorites] = useAtom(state.favoritesAtom);
+
+    // console.log({ image, title, overview, id, service, countries, imdb });
+    // will get user's favorites
+    const favoriteHandler = () => {
+        axios
+            .post(
+                process.env.REACT_APP_BASE_URL +
+                    "/user/" +
+                    currentUser.id +
+                    "/favorites/",
+                {
+                    headers: authHeader(),
+                    user_id: currentUser.id,
+                    movie_id: id,
+                }
+            )
+            .then(() => {
+                setFavorites([...favorites, id]);
+            })
+            .catch((e) => console.error(e));
+    };
+
+    const isFavorite = favorites.includes(id);
 
     return (
         <div className="col-sm-12 col-md-6 col-lg-4 mb-4">
             <div className="bg-dark border card text-white">
-                <img src={picture} className="card-img-top" alt={title} />
+                <img src={image} className="card-img-top" alt={title} />
                 <div className="card-body">
-                    <h5 className="card-title">{title}</h5>
+                    <h5 className="card-title">
+                        <div className="title">{title}</div>
+                        {currentUser?.id && (
+                            <button
+                                data-movie={id}
+                                className="btn btn-light mx-5"
+                                onClick={favoriteHandler}
+                            >
+                                {isFavorite ? (
+                                    <AiFillHeart className="fav" />
+                                ) : (
+                                    <AiOutlineHeart className="fav" />
+                                )}
+                            </button>
+                        )}
+                    </h5>
                     <h6 className="card-subtitle mb-2 text-danger">
                         Available on {service.toUpperCase()} in {countries}
                     </h6>
                     <p className="card-text">{overview}</p>
                     <a
-                        href={`https://www.imdb.com/title/${id}`}
+                        href={`https://www.imdb.com/title/${imdb}`}
                         className="btn btn-danger"
                     >
                         More details on IMDB

@@ -65,6 +65,7 @@ const state = {
             streamingInfo: "",
         },
     ]),
+    favoritesAtom: atom([]),
     currentUserAtom: atom(AuthService.getCurrentUser()),
 };
 

@@ -3,7 +3,6 @@ import { render } from "react-dom";
 import App from "./App";
 
 render(
-
     <StrictMode>
         <App />
     </StrictMode>,

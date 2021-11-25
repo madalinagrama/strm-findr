@@ -13,6 +13,7 @@ import Spinner from "./components/Spinner";
 import Register from "./components/Register";
 import Login from "./components/Login";
 import UserProfile from "./components/UserProfile";
+import authHeader from "./components/auth/components/services/auth-header";
 
 import "./App.css";
 // import UserProfile from "./components/user/UserProfile";
@@ -22,24 +23,27 @@ export const tokenAtom = atom(false);
 
 const App = () => {
     const [keyword] = useAtom(state.currentKeywordAtom);
-    const [_cards, setCards] = useAtom(state.cardsAtom);
+    const [, setCards] = useAtom(state.cardsAtom);
     const [loading, setLoading] = useAtom(state.loadingAtom);
+    const [currentUser] = useAtom(state.currentUserAtom);
+    const [, setFavorites] = useAtom(state.favoritesAtom);
 
     useEffect(() => {
-        const cardsLoader = async () => {
+        const cardsLoader = () => {
             let cards = [];
 
             axios
-                .get(process.env.REACT_APP_URL)
+                .get(process.env.REACT_APP_BASE_URL + "/movies")
                 .then((data) => {
                     data.data.forEach((r) => {
                         cards.push({
                             image: r.posterURL,
                             title: r.originalTitle,
                             overview: r.overview.slice(0, 150) + "...",
-                            id: r.imdbID,
+                            imdb: r.imdbID,
                             service: r.streamingInfo,
                             countries: r.countries,
+                            id: r.id,
                         });
                     });
 
@@ -53,9 +57,22 @@ const App = () => {
                         setLoading(false);
                     }
                 })
-                .catch((e) => {
-                    console.error(e);
-                });
+                .catch((e) => console.error(e));
+
+            if (!!currentUser) {
+                axios
+                    .get(
+                        process.env.REACT_APP_BASE_URL +
+                            "/user/" +
+                            currentUser.id +
+                            "/favorites",
+                        { headers: authHeader() }
+                    )
+                    .then((data) => {
+                        setFavorites(data.data);
+                    })
+                    .catch((e) => console.error(e));
+            }
         };
 
         cardsLoader();
