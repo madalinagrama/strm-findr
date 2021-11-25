@@ -9,7 +9,7 @@ import Input from "./Input";
 
 const Login = () => {
     const [currentUser, setCurrentUser] = useAtom(state.currentUserAtom);
-    const [favorites, setFavorites] = useAtom(state.favoritesAtom);
+    const [, setFavorites] = useAtom(state.favoritesAtom);
 
     const [username, setUsername] = useState(currentUser);
     const [password, setPassword] = useState("");
@@ -28,7 +28,6 @@ const Login = () => {
                 setCurrentUser(username);
                 setSuccess(true);
                 // fetch favorites and set favorites
-
             },
             (error) => {
                 const resMessage =

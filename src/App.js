@@ -23,10 +23,10 @@ export const tokenAtom = atom(false);
 
 const App = () => {
     const [keyword] = useAtom(state.currentKeywordAtom);
-    const [_cards, setCards] = useAtom(state.cardsAtom);
+    const [, setCards] = useAtom(state.cardsAtom);
     const [loading, setLoading] = useAtom(state.loadingAtom);
     const [currentUser] = useAtom(state.currentUserAtom);
-    const [favorites, setFavorites] = useAtom(state.favoritesAtom);
+    const [, setFavorites] = useAtom(state.favoritesAtom);
 
     useEffect(() => {
         const cardsLoader = () => {

@@ -7,7 +7,7 @@ import Index from "./Index";
 
 const Country = () => {
     const { country } = useParams();
-    const [_country, setCountry] = useAtom(state.currentCountryAtom);
+    const [, setCountry] = useAtom(state.currentCountryAtom);
 
     useEffect(() => {
         setCountry(country);

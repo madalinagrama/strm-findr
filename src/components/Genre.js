@@ -7,7 +7,7 @@ import Index from "./Index";
 
 const Country = () => {
     const { genre } = useParams();
-    const [_genre, setGenre] = useAtom(state.currentGenreAtom);
+    const [, setGenre] = useAtom(state.currentGenreAtom);
 
     useEffect(() => {
         setGenre(genre);

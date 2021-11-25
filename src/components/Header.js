@@ -11,10 +11,10 @@ import state from "../stateManager";
 import ImageSlider from "./ImageSlider";
 
 const Header = () => {
-    const [_country, setCountry] = useAtom(state.currentCountryAtom);
-    const [_genre, setGenre] = useAtom(state.currentGenreAtom);
+    const [, setCountry] = useAtom(state.currentCountryAtom);
+    const [, setGenre] = useAtom(state.currentGenreAtom);
     const [keyword, setKeyword] = useAtom(state.currentKeywordAtom);
-    const [_loading, setLoading] = useAtom(state.loadingAtom);
+    const [, setLoading] = useAtom(state.loadingAtom);
     const [countries] = useAtom(state.countriesListAtom);
     const [genres] = useAtom(state.genresListAtom);
     const [currentUser] = useAtom(state.currentUserAtom);
