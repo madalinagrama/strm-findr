@@ -1,7 +1,5 @@
 package com.example.demo.favorites;
 
-import com.example.demo.appuser.AppUserRepository;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 @Service
